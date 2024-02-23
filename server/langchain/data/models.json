@@ -1,0 +1,32 @@
+[
+  {
+    "name": "gpt-3.5-turbo",
+    "description": "Currently points to gpt-3.5-turbo-0613.",
+    "context_window": 4096,
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-16k",
+    "description": "Currently points to gpt-3.5-turbo-0613. With 16k tokens.",
+    "context_window": 16385,
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4",
+    "description": "Currently points to gpt-4-0613.",
+    "context_window": 8192,
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4-32k",
+    "description": "Currently points to gpt-4-32k-0613.",
+    "context_window": 32768,
+    "type": "openai"
+  },
+  {
+    "name": "mixtral-8x7b-instruct-v0.1-gguf",
+    "description": "Currently points to mixtral-8x7b-instruct-v0.1-gguf-0613.",
+    "path": "F:\\LLM\\TheBloke\\Mixtral-8x7B-Instruct-v0.1-GGUF\\mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf",
+    "type": "gguf"
+  }
+]

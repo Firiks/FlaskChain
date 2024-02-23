@@ -1,0 +1,21 @@
+#TODO: update
+langchain==0.0.354
+openai==0.28.1
+chromadb==0.4.15
+
+torch==2.1.0+cu121 # pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+torchaudio==2.1.0+cu121
+torchvision==0.16.0+cu121
+
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+gitpython
+langchain_experimental
+pypdf
+huggingface-hub
+python-dotenv
+tiktoken
+chardet
+InstructorEmbedding
+sentence_transformers

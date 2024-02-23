@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlaskChain conversation - {{ data.conversation_id }}</title>
+  <!-- <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.svg') }}"> -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/default.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <div id="chat-container">
+    <div id="sidebar">
+      <!-- <button class="btn btn-primary rounded-input mb-3">New Chat</button> -->
+      <!-- <div id="model-sidebar" class="mb-3">
+        <label for="model" class="form-label text-light">Select Model:</label>
+        <select class="form-select" id="model">
+          <option value="model1">Model 1</option>
+          <option value="model2">Model 2</option>
+          <option value="model3">Model 3</option>
+        </select>
+      </div> -->
+      <div id="conversation-id" class="mb-3">
+        <p class="text-light">Conversation ID: {{ data.conversation_id }}</p>
+      </div>
+      <div id="temperature-sidebar" class="mb-3">
+        <p class="text-light">Temperature: {{ data.temperature }}</p>
+      </div>
+      <div id="current-model" class="mb-3">
+        <p class="text-light">Current Model: {{ data.model }}</p>
+      </div>
+      <div id="loaded-documents" class="mb-3">
+        <p class="text-light">Loaded Documents: {{ data.documents if data.documents else "None" }}</p>
+      </div>
+      <hr />
+      <!-- <div id="sidebar-chat-history">
+        <p class="text-light">HTML</p>
+        <p class="text-light current">CSS</p>
+        <p class="text-light">Arts</p>
+        <p class="text-light">Politics</p>
+      </div> -->
+    </div>
+
+    <div id="main-content">
+      <div id="history-container">
+        <!-- Chat log content goes here -->
+        <!-- <div class="message user-message">
+          <strong>User:</strong>
+          <div class="content">Hello!</div> 
+        </div>
+        <div class="message ai-message">
+          <strong>AI:</strong>
+          <div class="content">Hi there! How can I help you today?</div>
+          <span class="metadata">Source document: <a href="#">https://www.example.com</a></span>
+        </div> -->
+        <!-- More messages go here -->
+      </div>
+    </div>
+  </div>
+
+  <div id="input-container">
+    <!-- Input field goes here -->
+    <div class="input-group">
+      <label for="prompt" class="form-label"><strong>Prompt:&nbsp;</strong></label>
+      <textarea id="prompt-input" class="form-control rounded-input" type="textarea" name="prompt" rows="1"></textarea>
+      <button id="send-button" class="btn btn-primary rounded-input">Send</button>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/highlight.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/markdown-it.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+
+</html>

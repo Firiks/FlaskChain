@@ -1,0 +1,14 @@
+.venv
+.env
+*.db
+docs/*
+examples/*
+data/*
+server/chroma/*
+server/logs/*
+__pycache__
+start.sh
+start-id.sh
+
+!.gitignore
+!.gitkeep
