@@ -60,7 +60,11 @@ def load_saved_memory(messages):
 
     retrieved_chat_history = ChatMessageHistory(messages=retrieved_messages)
 
-    retrieved_memory = ConversationBufferMemory(chat_memory=retrieved_chat_history)
+    retrieved_memory = ConversationBufferMemory(
+        chat_memory=retrieved_chat_history,
+        memory_key="history",
+        input_key="question"
+    )
 
     return retrieved_memory
 
