@@ -7,8 +7,6 @@ Handle the initialization of the LLM and the chain.
 # core imports
 import os
 
-from pprint import pprint
-
 # langchain imports
 from langchain.chat_models import ChatOpenAI
 from langchain.llms.llamacpp import LlamaCpp
@@ -45,8 +43,6 @@ def extract_memory_from_chain(documents=None):
         extracted_messages = chain.memory.chat_memory.messages if chain.memory else []
 
     if extracted_messages:
-        pprint(extracted_messages)
-
         logger.info(f"Extracted messages from chain: {extracted_messages}")
 
         messages = messages_to_dict(extracted_messages)
