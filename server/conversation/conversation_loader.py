@@ -33,7 +33,9 @@ def get_memory():
     global documents
 
     memory = extract_memory_from_chain(documents)
-    memory = json.dumps(memory) if memory else None
+
+    if not memory:
+        memory = []
 
     return memory
 

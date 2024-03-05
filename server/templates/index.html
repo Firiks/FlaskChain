@@ -47,16 +47,22 @@
     <div id="main-content">
       <div id="history-container">
         <!-- Chat log content goes here -->
-        <!-- <div class="message user-message">
+      {% if data.messages %}
+       {% for message in data.messages %}
+        {% if message.data.type == "human" %}
+        <div class="message user-message">
           <strong>User:</strong>
-          <div class="content">Hello!</div> 
+          <div class="content">{{ message.data.conent }}</div>
         </div>
+        {% else %}
         <div class="message ai-message">
           <strong>AI:</strong>
-          <div class="content">Hi there! How can I help you today?</div>
-          <span class="metadata">Source document: <a href="#">https://www.example.com</a></span>
-        </div> -->
-        <!-- More messages go here -->
+          <div class="content">{{ message.data.content }}</div>
+          <!-- <span class="metadata">Source document: <a href="#">{{ message.data.source_document }}</a></span> -->
+        </div>
+        {% endif %}
+        {% endfor %}
+      {% endif %}
       </div>
     </div>
   </div>
