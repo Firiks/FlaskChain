@@ -47,12 +47,12 @@
     <div id="main-content">
       <div id="history-container">
         <!-- Chat log content goes here -->
-      {% if data.messages %}
-       {% for message in data.messages %}
+      {% if data.memory %}
+       {% for message in data.memory %}
         {% if message.data.type == "human" %}
         <div class="message user-message">
           <strong>User:</strong>
-          <div class="content">{{ message.data.conent }}</div>
+          <div class="content">{{ message.data.content }}</div>
         </div>
         {% else %}
         <div class="message ai-message">

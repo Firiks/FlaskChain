@@ -211,4 +211,5 @@ document.addEventListener('DOMContentLoaded', function() {
     await startQA();
   });
 
+  addMarkdownToAiMessages();
 });
