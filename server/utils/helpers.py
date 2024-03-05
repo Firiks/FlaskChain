@@ -6,6 +6,7 @@ import os
 import glob
 import random
 import string
+import pprint
 import mimetypes
 
 def generate_random_string(length=10):
@@ -37,3 +38,6 @@ def detect_file_type(directory_path):
             return None
     else:
         return None
+
+def var_dump(var):
+    pprint.pprint(var)
