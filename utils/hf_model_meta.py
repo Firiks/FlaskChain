@@ -2,4 +2,10 @@ from huggingface_hub import HfApi
 
 api = HfApi()
 
-models = api.list_models()
+def search_model(search: str):
+    global api
+
+    models = api.list_models(
+        search=search,
+    )
+    return models
