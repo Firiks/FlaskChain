@@ -9,6 +9,7 @@ import html
 import threading
 from queue import Queue
 from typing import Any, Dict, List
+from uuid import UUID
 
 # langchain imports
 from langchain.schema.output import LLMResult
@@ -62,6 +63,11 @@ class StreamHandler(BaseCallbackHandler):
 
         # error message
         sse_queue.put({'type': 'error', 'content': str(error)})
+
+    def on_chain_end(self, outputs: Dict[str, Any], **kwargs) -> None:
+        logger.info(f"Chain ended, saving conversation...")
+
+        save_or_update_conversation()
 
 # see https://blog.stackademic.com/streaming-responses-from-llm-using-langchain-fastapi-329f588d3b40
 def sse():
