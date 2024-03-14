@@ -9,7 +9,6 @@ import html
 import threading
 from queue import Queue
 from typing import Any, Dict, List
-from uuid import UUID
 
 # langchain imports
 from langchain.schema.output import LLMResult
