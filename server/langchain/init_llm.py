@@ -12,7 +12,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.llms.llamacpp import LlamaCpp
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
-from langchain.chains import RetrievalQA, ConversationChain
+from langchain.chains import RetrievalQA, ConversationChain, LLMChain
 from langchain.schema import messages_from_dict, messages_to_dict
 from langchain.memory.chat_message_histories.in_memory import ChatMessageHistory
 
@@ -81,6 +81,7 @@ def init_local_llm(model_info, temperature=0.0):
         n_gpu_layers=10,
         n_batch=100,
         streaming=True,
+        f16_kv=True,
         callbacks=[]
     )
 
@@ -102,7 +103,7 @@ def init_standard_chain(template, memory = None):
 
     prompt_template = PromptTemplate.from_template(template)
 
-    chain = ConversationChain(
+    chain = LLMChain(
         prompt=prompt_template,
         llm=llm,
         verbose=True,
