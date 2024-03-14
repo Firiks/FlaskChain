@@ -81,7 +81,7 @@ def init_local_llm(model_info, temperature=0.0):
         n_gpu_layers=10,
         n_batch=100,
         streaming=True,
-        f16_kv=True,
+        f16_kv=True, # MUST set to True, otherwise you will run into problem after a couple of calls
         callbacks=[]
     )
 
