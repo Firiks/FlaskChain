@@ -7,7 +7,8 @@ nvcc --version
 :: check smi
 nvidia-smi
 
-.venv/Scripts/activate.bat
+:: activate virtual environment
+call .venv/Scripts/activate.bat
 
 set CMAKE_ARGS = "-DLLAMA_OPENBLAS=on"
 set FORCE_CMAKE = 1
