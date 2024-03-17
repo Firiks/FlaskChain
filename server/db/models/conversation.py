@@ -6,7 +6,7 @@ class Conversation(db.Model):
     model = db.Column(db.String(255), nullable=False)
     documents = db.Column(db.String(255), nullable=True)
     temperature = db.Column(db.Float, nullable=False)
-    prompt_template = db.Column(db.String(255), nullable=False)
+    prompt_template = db.Column(db.Text, nullable=False)
     memory = db.Column(db.Text, nullable=True)
 
     def __init__(self, conversation_id, model, documents, temperature, prompt_template, memory=None):
