@@ -10,8 +10,8 @@ from server.db.db import db
 from server.utils.logger import logger
 from server.langchain.models_info import models
 from server.db.models.conversation import Conversation
-from server.langchain.prompt_templates import templates
 from server.utils.helpers import generate_random_string
+from server.prompts.prompt_template import assemble_template
 from server.langchain.vector_db import make_db_from_documents, get_db_path
 from server.langchain.init_llm import init_chain_with_documents, init_standard_chain, init_openai_llm, init_local_llm, load_saved_memory, extract_memory_from_chain
 
@@ -58,13 +58,16 @@ def start_conversation(args):
         load_existing_conversation(conversation_id)
     elif args.model and args.prompt_template:
         model = args.model
-        prompt_template = args.prompt_template
+        prompt_template_id = args.prompt_template
         temperature = float(args.temperature if args.temperature else 0.0)
         documents = args.documents
 
         try:
+            # get model info
             model_info = [m for m in models if m['name'] == model][0]
-            prompt_template =[t.get('value') for t in templates if t.get('name') == prompt_template][0]
+
+            # assemble prompt template
+            prompt_template = assemble_template(prompt_template_id)
         except:
             logger.error("Invalid model or prompt template")
             exit(1)
