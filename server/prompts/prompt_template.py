@@ -6,7 +6,7 @@ json_path = get_location('../prompts/data/prompt_templates.json')
 
 templates = json.load(open(json_path, 'r'))
 
-def assemble_template(template_id = 'base', rag = True, rag_derive = True):
+def assemble_template(template_id = 'base', rag = True, rag_derive = True) -> str:
     template = _get_template_by_id(template_id)
 
     if rag:

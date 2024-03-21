@@ -67,7 +67,7 @@ def start_conversation(args):
             model_info = [m for m in models if m['name'] == model][0]
 
             # assemble prompt template
-            prompt_template = assemble_template(prompt_template_id)
+            prompt_template = assemble_template(prompt_template_id, documents != '')
         except:
             logger.error("Invalid model or prompt template")
             exit(1)
