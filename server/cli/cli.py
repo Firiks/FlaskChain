@@ -1,5 +1,10 @@
+"""
+Handles the command line interface for the server
+"""
+
 import argparse
-from server.langchain.models_info import list_models
+
+from server.langchain.models_info import list_models, add_local_model, remove_local_model
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Run the FlaskChain app, use -i to load existing conversation or -m and -p to start a new one')
@@ -9,6 +14,9 @@ def parse_arguments():
     parser.add_argument('-t', '--temperature', type=float, default=0.0, help='Temperature for the llm')
     parser.add_argument('-d', '--documents', type=str, default='', help='Path to folder with documents, use absolute path')
     parser.add_argument('-lm', '--list-models', dest='list_models', default=False, action='store_true', help='List available models')
+    parser.add_argument('-am', '--add-local-model', dest='add_local_model', default='', type=str, help='Name of new local model')
+    parser.add_argument('-mp', '--model-path', dest='model_path', default='', type=str, help='Path to local model')
+    parser.add_argument('-rm', '--remove-model', dest='remove_model', default='', type=str, help='Name of model to remove')
     # parser.add_argument('-w', '--web', type=str, default='', help='Link to website that will be used for scraping') #TODO: Implement web scraping
     # parser.add_argument('-r', '--repository', type=str, default='', help='Path to repository, use absolute path') #TODO: Implement repository
 
@@ -17,4 +25,12 @@ def parse_arguments():
 def cli_callbacks(args):
     if args.list_models:
         list_models()
+        exit(0)
+
+    if args.remove_model:
+        remove_local_model(args.remove_model)
+        exit(0)
+
+    if args.add_local_model:
+        add_local_model(args.add_local_model, args.model_path)
         exit(0)

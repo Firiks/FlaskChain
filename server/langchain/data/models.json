@@ -1,32 +1,72 @@
 [
   {
-    "name": "gpt-3.5-turbo",
-    "description": "Currently points to gpt-3.5-turbo-0613.",
-    "context_window": 4096,
+    "name": "mixtral-8x7b-instruct-v0.1-gguf",
+    "path": "F:\\LLM\\TheBloke\\Mixtral-8x7B-Instruct-v0.1-GGUF\\mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf",
+    "type": "gguf"
+  },
+  {
+    "name": "mistral-7b-instruct-v0.2-gguf",
+    "path": "F:\\LLM\\TheBloke\\Mistral-7B-Instruct-v0.2-GGUF\\mistral-7b-instruct-v0.2.Q5_K_M.gguf",
+    "type": "gguf"
+  },
+  {
+    "name": "gpt-3.5-turbo-1106",
     "type": "openai"
   },
   {
-    "name": "gpt-3.5-turbo-16k",
-    "description": "Currently points to gpt-3.5-turbo-0613. With 16k tokens.",
-    "context_window": 16385,
+    "name": "gpt-4-0613",
     "type": "openai"
   },
   {
     "name": "gpt-4",
-    "description": "Currently points to gpt-4-0613.",
-    "context_window": 8192,
     "type": "openai"
   },
   {
-    "name": "gpt-4-32k",
-    "description": "Currently points to gpt-4-32k-0613.",
-    "context_window": 32768,
+    "name": "gpt-3.5-turbo-0301",
     "type": "openai"
   },
   {
-    "name": "mixtral-8x7b-instruct-v0.1-gguf",
-    "description": "Currently points to mixtral-8x7b-instruct-v0.1-gguf-0613.",
-    "path": "F:\\LLM\\TheBloke\\Mixtral-8x7B-Instruct-v0.1-GGUF\\mixtral-8x7b-instruct-v0.1.Q5_K_M.gguf",
-    "type": "gguf"
+    "name": "gpt-3.5-turbo-0613",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4-vision-preview",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-16k-0613",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-0125",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-16k",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4-1106-preview",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-instruct",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-3.5-turbo-instruct-0914",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4-0125-preview",
+    "type": "openai"
+  },
+  {
+    "name": "gpt-4-turbo-preview",
+    "type": "openai"
   }
 ]
