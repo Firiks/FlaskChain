@@ -66,8 +66,12 @@ def start_conversation(args):
             # get model info
             model_info = [m for m in models if m['name'] == model][0]
 
+            derive = True if documents != '' else False # TODO: cli argument for this
+            rag = True if documents != '' else False
+            is_llama = model_info.get('type') == 'gguf'
+
             # assemble prompt template
-            prompt_template = assemble_template(prompt_template_id, documents != '')
+            prompt_template = assemble_template(prompt_template_id, rag, derive, is_llama)
         except:
             logger.error("Invalid model or prompt template")
             exit(1)

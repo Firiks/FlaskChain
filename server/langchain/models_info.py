@@ -6,6 +6,7 @@ import os
 import json
 import openai
 
+from server.utils.logger import logger
 from server.utils.helpers import get_location
 
 json_path = get_location('../langchain/data/models.json')
@@ -20,14 +21,14 @@ def list_models():
 
     update_openai_models()
 
-    print('Available models:')
+    logger.info('Available models:')
 
     for model in models:
-        print(model['name'])
+        logger.info(model['name'])
 
 def update_openai_models():
     global models
-    print('Updating OpenAI models...')
+    logger.info('Updating OpenAI models...')
 
     openai.api_key = os.environ['OPENAI_API_KEY']
     openai_models = openai.Model.list()
@@ -36,7 +37,7 @@ def update_openai_models():
     models = [model for model in models if model['type'] != 'openai']
 
     for model in openai_models['data']:
-        print(json.dumps(model, indent=2))
+        logger.info(json.dumps(model, indent=2))
 
         if 'gpt' in model['id']:
             models.append({'name': model['id'], 'type': 'openai'})
@@ -54,10 +55,10 @@ def add_local_model(name: str, path: str, type = 'gguf'):
     # check if model already exists
     for model in models:
         if model['name'] == name:
-            print('Model already exists')
+            logger.info('Model already exists')
             return
 
-    print(f'Adding local model: {name} at {path}')
+    logger.info(f'Adding local model: {name} at {path}')
 
     models.append({'name': name, 'path': path, 'type': type})
 
@@ -71,7 +72,7 @@ def remove_local_model(name: str):
 
     name = name.lower().strip()
 
-    print(f'Removing model: {name}')
+    logger.info(f'Removing model: {name}')
 
     models = [model for model in models if model['name'] != name]
 
