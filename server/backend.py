@@ -11,7 +11,6 @@ from flask import request
 
 # local imports
 from server.langchain.models_info import models
-from server.langchain.prompt_templates import templates
 from server.langchain.response_stream import put_prompt_to_queue, sse
 from server.conversation.conversation_loader import get_current_conversation_data, get_memory
 
@@ -28,7 +27,6 @@ def get_index_data():
         'temperature': temperature,
         'conversation_id': conversation_id,
         'prompt_template': prompt_template, # current prompt template
-        'prompt_templates': templates
     }
 
 def chat_response():
