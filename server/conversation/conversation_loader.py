@@ -48,7 +48,7 @@ def init_llm(model_info, temperature):
     if model_info.get('type') == 'openai':
         init_openai_llm(model_info.get('name'), temperature)
     else:
-        init_local_llm(model_info.get('name'), temperature)
+        init_local_llm(model_info, temperature)
 
 def start_conversation(args):
     global conversation_id, model, temperature, documents, prompt_template
@@ -58,7 +58,7 @@ def start_conversation(args):
         load_existing_conversation(conversation_id)
     elif args.model and args.prompt_template:
         model = args.model
-        prompt_template_id = args.prompt_template
+        prompt_template_id = args.prompt_template if args.prompt_template else 'base'
         temperature = float(args.temperature if args.temperature else 0.0)
         documents = args.documents
 
