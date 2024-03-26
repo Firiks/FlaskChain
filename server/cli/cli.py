@@ -5,6 +5,7 @@ Handles the command line interface for the server
 import argparse
 
 from server.langchain.models_info import list_models, add_local_model, remove_local_model
+from server.conversation.conversation_loader import list_conversations
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Run the FlaskChain app, use -i to load existing conversation or -m and -p to start a new one')
@@ -13,6 +14,7 @@ def parse_arguments():
     parser.add_argument('-p' ,'--promt-template', dest='prompt_template', default='', type=str, help='Prompt template name')
     parser.add_argument('-t', '--temperature', type=float, default=0.0, help='Temperature for the llm')
     parser.add_argument('-d', '--documents', type=str, default='', help='Path to folder with documents, use absolute path')
+    parser.add_argument('-lc', '--list-conversations', dest='list_conversations', default=False, action='store_true', help='List existing conversations')
     parser.add_argument('-lm', '--list-models', dest='list_models', default=False, action='store_true', help='List available models')
     parser.add_argument('-am', '--add-local-model', dest='add_local_model', default='', type=str, help='Name of new local model')
     parser.add_argument('-mp', '--model-path', dest='model_path', default='', type=str, help='Path to local model')
@@ -33,4 +35,8 @@ def cli_callbacks(args):
 
     if args.add_local_model:
         add_local_model(args.add_local_model, args.model_path)
+        exit(0)
+
+    if args.list_conversations:
+        list_conversations()
         exit(0)

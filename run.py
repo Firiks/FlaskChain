@@ -18,13 +18,13 @@ def main():
 
     args = parse_arguments()
 
-    cli_callbacks(args)
-
     flask = app.create_app()
 
     init_db(flask)
 
     set_app(flask)
+
+    cli_callbacks(args)
 
     start_conversation(args)
 

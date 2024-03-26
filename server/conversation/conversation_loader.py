@@ -154,3 +154,13 @@ def save_or_update_conversation():
     with app.app_context():
         db.session.add(conversation)
         db.session.commit()
+
+def list_conversations():
+    with app.app_context():
+        conversations = Conversation.query.all()
+
+    if conversations:
+        for conversation in conversations:
+            logger.info(f"Conversation ID: {conversation.conversation_id}, Model: {conversation.model}, Temperature: {conversation.temperature}, Prompt template: {conversation.prompt_template}, Documents: {conversation.documents}")
+    else:
+        logger.info("No conversations found")
