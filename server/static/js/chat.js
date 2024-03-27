@@ -175,10 +175,10 @@ async function startGeneratig(message) {
  * Existing chat history
  */
 function addMarkdownToAiMessages() {
-  // TODO: load from data-attribute
   const aiMessages = document.querySelectorAll('.ai-message .content');
   aiMessages.forEach((message) => {
-    message.innerHTML = addMarkdownToText(String(message.innerHTML));
+    // load text from data-content
+    message.innerHTML = addMarkdownToText(String(message.dataset.content));
   });
 }
 

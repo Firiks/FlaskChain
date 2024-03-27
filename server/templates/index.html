@@ -52,12 +52,12 @@
         {% if message.data.type == "human" %}
         <div class="message user-message">
           <strong>User:</strong>
-          <div class="content">{{ message.data.content }}</div>
+          <div data-content="{{ message.data.content }}" class="content">{{ message.data.content }}</div>
         </div>
         {% else %}
         <div class="message ai-message">
           <strong>AI:</strong>
-          <div class="content">{{ message.data.content }}</div>
+          <div data-content="{{ message.data.content }}" class="content">{{ message.data.content }}</div>
           <!-- <span class="metadata">Source document: <a href="#">{{ message.data.source_document }}</a></span> -->
         </div>
         {% endif %}
