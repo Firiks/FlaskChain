@@ -6,8 +6,8 @@ json_path = get_location('../prompts/data/prompt_templates.json')
 
 templates = json.load(open(json_path, 'r'))
 
-def assemble_template(template_id = 'base', rag = True, rag_derive = True, llama_intruction = False) -> str:
-    template = _get_template_by_id(template_id)
+def assemble_template(template_id, rag = True, rag_derive = True, llama_intruction = False) -> str:
+    template = _get_template_by_id(template_id, True)
 
     if rag:
         template = _add_rag(template)
@@ -28,10 +28,18 @@ def assemble_template(template_id = 'base', rag = True, rag_derive = True, llama
 
     return template
     
-def _get_template_by_id(template_id):
+def _get_template_by_id(template_id, system = False):
     global templates
 
-    prompt_template =[t.get('value') for t in templates if t.get('name') == template_id][0]
+    try:
+        prompt_template =[t for t in templates if t.get('name') == template_id][0]
+    except:
+        raise Exception('Invalid template id')
+
+    if system and prompt_template.get('type') != 'system':
+        raise Exception('Invalid template type')
+
+    prompt_template = prompt_template.get('value')
 
     return prompt_template
 
@@ -92,8 +100,3 @@ def _add_llama_instruction(prompt):
     llama_prompt = llama_prompt.replace('TEMPLATE', prompt)
 
     return llama_prompt
-
-if __name__ == "__main__":
-    template = assemble_template()
-
-    print(template)
