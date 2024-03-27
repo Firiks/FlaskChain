@@ -25,7 +25,7 @@ def init_logger(name):
     logger.setLevel(logging.DEBUG)
 
     # create a file handler
-    file_handler = logging.FileHandler(LOG_FILE, mode='w')
+    file_handler = logging.FileHandler(LOG_FILE, mode='a')
     file_handler.setLevel(logging.INFO)
 
     # create a console handler
