@@ -6,6 +6,7 @@ Handle the initialization of the LLM and the chain.
 
 # core imports
 import os
+import json
 
 # langchain imports
 from langchain.chat_models import ChatOpenAI
@@ -49,6 +50,35 @@ def extract_memory_from_chain(documents=None):
 
     return messages
 
+# TODO: token counting llama & openai
+# def parse_model_parameters(model_parameters):
+#     if model_parameters:
+#         return json.loads(model_parameters)
+#     else:
+#         return None
+
+# def get_token_count(text, type):
+#     global llm
+
+#     if type == 'gguf':
+#         return llm.get_num_tokens(text)
+#     elif type == 'openai':
+#         # TODO: count openai tokens
+#         pass
+
+def parse_model_parameters(model_parameters):
+    parsed_params = {
+        'temperature': float(model_parameters.get('temperature', 0.0)),
+        'top_p': float(model_parameters.get('top_p', 1)),
+        'max_tokens': int(model_parameters.get('max_tokens', 4096)),
+        'n': int(model_parameters.get('n', 1)),
+        'n_ctx': int(model_parameters.get('n_ctx', 32000)),
+        'n_gpu_layers': int(model_parameters.get('n_gpu_layers', 5)),
+        'n_batch': int(model_parameters.get('n_batch', 100)),
+    }
+
+    return parsed_params
+
 def load_saved_memory(messages):
     logger.info("Loading saved memory...")
 
@@ -64,7 +94,7 @@ def load_saved_memory(messages):
 
     return retrieved_memory
 
-def init_local_llm(model_info, temperature=0.0):
+def init_local_llm(model_info, temperature, max_tokens, n_ctx, n_gpu_layers, n_batch):
     global llm
 
     model_path = model_info.get('path')
@@ -77,21 +107,23 @@ def init_local_llm(model_info, temperature=0.0):
     llm = LlamaCpp(
         model_path=model_path,
         temperature=temperature,
-        n_ctx=2048,
-        n_gpu_layers=10,
-        n_batch=100,
+        n_ctx=n_ctx,
+        max_tokens=max_tokens,
+        n_gpu_layers=n_gpu_layers,
+        n_batch=n_batch,
         streaming=True,
         f16_kv=True, # MUST set to True, otherwise you will run into problem after a couple of calls
-        callbacks=[]
+        callbacks=[],
     )
 
     logger.info(f"Local LLM: {model_info.get('name')} has been loaded")
 
-def init_openai_llm(model_name, temperature=0.0):
+def init_openai_llm(model_name, temperature, max_tokens):
     global llm
 
     llm = ChatOpenAI(
         model=model_name,
+        max_tokens=max_tokens,
         temperature=temperature,
         streaming=True,
     )

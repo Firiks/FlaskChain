@@ -15,7 +15,7 @@ from server.langchain.response_stream import put_prompt_to_queue, sse
 from server.conversation.conversation_loader import get_current_conversation_data, get_memory
 
 def get_index_data():
-    conversation_id, model, temperature, documents, prompt_template = get_current_conversation_data()
+    conversation_id, model, model_parameters, documents, prompt_template = get_current_conversation_data()
 
     memory = get_memory()
 
@@ -24,7 +24,7 @@ def get_index_data():
         'models': models,
         'memory': memory,
         'documents': documents, # current documents
-        'temperature': temperature,
+        'model_parameters': model_parameters,
         'conversation_id': conversation_id,
         'prompt_template': prompt_template, # current prompt template
     }

@@ -13,14 +13,14 @@ from server.db.models.conversation import Conversation
 from server.utils.helpers import generate_random_string
 from server.prompts.prompt_template import assemble_template
 from server.langchain.vector_db import make_db_from_documents, get_db_path
-from server.langchain.init_llm import init_chain_with_documents, init_standard_chain, init_openai_llm, init_local_llm, load_saved_memory, extract_memory_from_chain
+from server.langchain.init_llm import init_chain_with_documents, init_standard_chain, init_openai_llm, init_local_llm, load_saved_memory, extract_memory_from_chain, parse_model_parameters
 
 # current conversation global variables
 app = None
 model = None
 memory = None
 documents = None
-temperature = None
+model_parameters = None
 conversation_id = None
 prompt_template = None
 
@@ -40,18 +40,18 @@ def get_memory():
     return memory
 
 def get_current_conversation_data():
-    global conversation_id, model, temperature, documents, prompt_template
+    global conversation_id, model, model_parameters, documents, prompt_template
 
-    return conversation_id, model, temperature, documents, prompt_template
+    return conversation_id, model, model_parameters, documents, prompt_template
 
-def init_llm(model_info, temperature):
+def init_llm(model_info, model_parameters):
     if model_info.get('type') == 'openai':
-        init_openai_llm(model_info.get('name'), temperature)
+        init_openai_llm(model_info.get('name'), **model_parameters)
     else:
-        init_local_llm(model_info, temperature)
+        init_local_llm(model_info, **model_parameters)
 
 def start_conversation(args):
-    global conversation_id, model, temperature, documents, prompt_template
+    global conversation_id, model, model_parameters, documents, prompt_template
 
     if args.conversation_id:
         conversation_id = args.conversation_id
@@ -59,7 +59,7 @@ def start_conversation(args):
     elif args.model and args.prompt_template:
         model = args.model
         prompt_template_id = args.prompt_template if args.prompt_template else 'base'
-        temperature = float(args.temperature if args.temperature else 0.0)
+        model_parameters = parse_model_parameters(args)
         documents = args.documents
 
         try:
@@ -80,7 +80,7 @@ def start_conversation(args):
 
         logger.info(f"Generated conversation ID: {conversation_id}")
 
-        init_llm(model_info, temperature)
+        init_llm(model_info, model_parameters)
     
         if documents:
             db_path = make_db_from_documents(documents, conversation_id)
@@ -95,7 +95,7 @@ def start_conversation(args):
         exit(1)
 
 def load_existing_conversation(conversation_id):
-    global model, temperature, documents, prompt_template, app
+    global model, model_parameters, documents, prompt_template, app
 
     logger.info(f"Loading conversation with ID {conversation_id}")
 
@@ -107,7 +107,7 @@ def load_existing_conversation(conversation_id):
         exit(1)
 
     model = conversation.model # model key
-    temperature = conversation.temperature # temperature for LLM
+    model_parameters = json.loads(conversation.model_parameters) if conversation.model_parameters else dict() # model parameters
     documents = conversation.documents # path to documents
     memory = conversation.memory # serialized memory
     prompt_template = conversation.prompt_template # prompt template
