@@ -12,16 +12,16 @@ def assemble_template(template_id, rag = True, rag_derive = True, llama_intructi
     if rag:
         template = _add_rag(template)
         template = _derive_outside_context(template, rag_derive)
-        template = _add_formatting(template)
-        template = _add_context(template)
-        template = _add_history(template)
-        template = _add_question(template)
-        template = _add_answer(template)
+        template = _add_prompt_partial(template, 'formatting')
+        template = _add_prompt_partial(template, 'context')
+        template = _add_prompt_partial(template, 'history')
+        template = _add_prompt_partial(template, 'question')
+        template = _add_prompt_partial(template, 'answer')
     else :
-        template = _add_formatting(template)
-        template = _add_history(template)
-        template = _add_question(template)
-        template = _add_answer(template)
+        template = _add_prompt_partial(template, 'formatting')
+        template = _add_prompt_partial(template, 'history')
+        template = _add_prompt_partial(template, 'question')
+        template = _add_prompt_partial(template, 'answer')
 
     if llama_intruction:
         template = _add_llama_instruction(template)
@@ -43,6 +43,13 @@ def _get_template_by_id(template_id, system = False):
 
     return prompt_template
 
+def _add_prompt_partial(prompt, template_id):
+    prompt_template = _get_template_by_id(template_id)
+
+    prompt = prompt + " " + prompt_template
+
+    return prompt
+
 def _add_rag(prompt):
     rag_prompt = _get_template_by_id('base_rag')
     prompt = prompt + " " + rag_prompt
@@ -56,41 +63,6 @@ def _derive_outside_context(prompt, can_derive = False):
         derive = 'dont'
     
     prompt = prompt.replace('CONTENT_DERIVE', derive)
-
-    return prompt
-
-def _add_formatting(prompt):
-    format_prompt = _get_template_by_id('formatting')
-
-    prompt = prompt + " " + format_prompt
-
-    return prompt
-
-def _add_context(prompt):
-    context_prompt = _get_template_by_id('context')
-
-    prompt = prompt + " " + context_prompt
-
-    return prompt
-
-def _add_history(prompt):
-    history_prompt = _get_template_by_id('history')
-
-    prompt = prompt + " " + history_prompt
-
-    return prompt
-
-def _add_question(prompt):
-    question_prompt = _get_template_by_id('question')
-
-    prompt = prompt + " " + question_prompt
-
-    return prompt
-
-def _add_answer(prompt):
-    answer_prompt = _get_template_by_id('answer')
-
-    prompt = prompt + " " + answer_prompt
 
     return prompt
 
