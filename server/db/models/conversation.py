@@ -9,16 +9,18 @@ class Conversation(db.Model):
     conversation_id = db.Column(db.String(8), unique=True, index=True, nullable=False)
     model = db.Column(db.String(255), nullable=False)
     documents = db.Column(db.String(255), nullable=True)
+    model_type = db.Column(db.String(255), nullable=False)
     model_parameters = db.Column(db.Text, nullable=True) # json
     prompt_template = db.Column(db.Text, nullable=False)
     memory = db.Column(db.Text, nullable=True) # json
 
-    def __init__(self, conversation_id, model, documents, prompt_template, memory=None, model_parameters=None):
+    def __init__(self, conversation_id, model, documents, prompt_template, model_type, memory=None, model_parameters=None):
         self.conversation_id = conversation_id
         self.model = model
         self.documents = documents
         self.prompt_template = prompt_template
         self.memory = memory
+        self.model_type = model_type
         self.model_parameters = model_parameters
 
     def __repr__(self):

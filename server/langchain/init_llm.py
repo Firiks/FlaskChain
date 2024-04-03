@@ -51,12 +51,6 @@ def extract_memory_from_chain(documents=None):
     return messages
 
 # TODO: token counting llama & openai
-# def parse_model_parameters(model_parameters):
-#     if model_parameters:
-#         return json.loads(model_parameters)
-#     else:
-#         return None
-
 # def get_token_count(text, type):
 #     global llm
 
@@ -66,16 +60,24 @@ def extract_memory_from_chain(documents=None):
 #         # TODO: count openai tokens
 #         pass
 
-def parse_model_parameters(model_parameters):
-    parsed_params = {
-        'temperature': float(model_parameters.get('temperature', 0.0)),
-        'top_p': float(model_parameters.get('top_p', 1)),
-        'max_tokens': int(model_parameters.get('max_tokens', 4096)),
-        'n': int(model_parameters.get('n', 1)),
-        'n_ctx': int(model_parameters.get('n_ctx', 32000)),
-        'n_gpu_layers': int(model_parameters.get('n_gpu_layers', 5)),
-        'n_batch': int(model_parameters.get('n_batch', 100)),
-    }
+def parse_model_parameters(model_parameters, type='gguf'):
+    if type == 'gguf':
+        parsed_params = {
+            'temperature': float(model_parameters.get('temperature', 0.0)),
+            'top_p': float(model_parameters.get('top_p', 0.95)),
+            'top_k': int(model_parameters.get('top_k', 40)),
+            'repeat_penalty': float(model_parameters.get('repeat_penalty', 1.1)),
+            'max_tokens': int(model_parameters.get('max_tokens', 4096)),
+            'n_ctx': int(model_parameters.get('n_ctx', 32000)),
+            'n_gpu_layers': int(model_parameters.get('n_gpu_layers', 5)),
+            'n_batch': int(model_parameters.get('n_batch', 512)),
+        }
+    elif type == 'openai':
+        parsed_params = {
+            'temperature': float(model_parameters.get('temperature', 0.0)),
+            'max_tokens': int(model_parameters.get('max_tokens', 4096)),
+            'n': int(model_parameters.get('n', 1)),
+        }
 
     return parsed_params
 
@@ -94,7 +96,7 @@ def load_saved_memory(messages):
 
     return retrieved_memory
 
-def init_local_llm(model_info, temperature, max_tokens, n_ctx, n_gpu_layers, n_batch):
+def init_local_llm(model_info, temperature, top_p, top_k, max_tokens, n_ctx, n_gpu_layers, n_batch, repeat_penalty):
     global llm
 
     model_path = model_info.get('path')
@@ -105,7 +107,11 @@ def init_local_llm(model_info, temperature, max_tokens, n_ctx, n_gpu_layers, n_b
 
     #TODO: tweak the parameters
     llm = LlamaCpp(
+        # n_threads=8,
         model_path=model_path,
+        top_p=top_p,
+        top_k=top_k,
+        repeat_penalty= repeat_penalty,
         temperature=temperature,
         n_ctx=n_ctx,
         max_tokens=max_tokens,
@@ -118,13 +124,16 @@ def init_local_llm(model_info, temperature, max_tokens, n_ctx, n_gpu_layers, n_b
 
     logger.info(f"Local LLM: {model_info.get('name')} has been loaded")
 
-def init_openai_llm(model_name, temperature, max_tokens):
+def init_openai_llm(model_name, temperature, max_tokens, n):
     global llm
 
     llm = ChatOpenAI(
         model=model_name,
         max_tokens=max_tokens,
         temperature=temperature,
+        model_kwargs={
+            'n': n
+        },
         streaming=True,
     )
 

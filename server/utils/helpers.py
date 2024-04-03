@@ -17,6 +17,9 @@ def get_location(relative_path):
 
     return os.path.join(current_location, relative_path)
 
+def path_exists(path):
+    return os.path.exists(path)
+
 def is_absolute_path(path):
     return os.path.isabs(path)
 
@@ -26,6 +29,7 @@ def create_excerpt_from_text(text, max_length=100):
 
     return text
 
+# TODO: refactor to return tuple of extensions in subdirectory
 def detect_file_type(directory_path):
     # Get the first file in the directory
     file_path = next(glob.iglob(f"{directory_path}/*.*"), None)

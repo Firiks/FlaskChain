@@ -11,7 +11,7 @@ import shutil
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader, JSONLoader #TODO: add WebBaseLoader
+from langchain.document_loaders import DirectoryLoader, PyPDFLoader, TextLoader, JSONLoader
 from langchain.embeddings import HuggingFaceInstructEmbeddings
 
 # local imports

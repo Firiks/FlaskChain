@@ -10,8 +10,8 @@ from server.db.db import db
 from server.utils.logger import logger
 from server.langchain.models_info import models
 from server.db.models.conversation import Conversation
-from server.utils.helpers import generate_random_string
 from server.prompts.prompt_template import assemble_template
+from server.utils.helpers import generate_random_string, path_exists
 from server.langchain.vector_db import make_db_from_documents, get_db_path
 from server.langchain.init_llm import init_chain_with_documents, init_standard_chain, init_openai_llm, init_local_llm, load_saved_memory, extract_memory_from_chain, parse_model_parameters
 
@@ -20,6 +20,7 @@ app = None
 model = None
 memory = None
 documents = None
+model_type = None
 model_parameters = None
 conversation_id = None
 prompt_template = None
@@ -51,7 +52,7 @@ def init_llm(model_info, model_parameters):
         init_local_llm(model_info, **model_parameters)
 
 def start_conversation(args):
-    global conversation_id, model, model_parameters, documents, prompt_template
+    global conversation_id, model, model_parameters, documents, prompt_template, model_type
 
     if args.conversation_id:
         conversation_id = args.conversation_id
@@ -63,12 +64,13 @@ def start_conversation(args):
         documents = args.documents
 
         try:
-            # get model info
+            # get model info, TODO: check if model exists in huggingface
             model_info = [m for m in models if m['name'] == model][0]
 
-            derive = True if documents != '' else False # TODO: cli argument for this
+            model_type = model_info.get('type')
             rag = True if documents != '' else False
-            is_llama = model_info.get('type') == 'gguf'
+            derive = args.derive_outside_documents if rag else False
+            is_llama = model_type == 'gguf'
 
             # assemble prompt template
             prompt_template = assemble_template(prompt_template_id, rag, derive, is_llama)
@@ -82,7 +84,7 @@ def start_conversation(args):
 
         init_llm(model_info, model_parameters)
     
-        if documents:
+        if documents != '' and path_exists(documents):
             db_path = make_db_from_documents(documents, conversation_id)
 
             init_chain_with_documents(prompt_template, db_path)
@@ -95,7 +97,7 @@ def start_conversation(args):
         exit(1)
 
 def load_existing_conversation(conversation_id):
-    global model, model_parameters, documents, prompt_template, app
+    global model, model_parameters, model_type, documents, prompt_template, app
 
     logger.info(f"Loading conversation with ID {conversation_id}")
 
@@ -107,7 +109,8 @@ def load_existing_conversation(conversation_id):
         exit(1)
 
     model = conversation.model # model key
-    model_parameters = json.loads(conversation.model_parameters) if conversation.model_parameters else dict() # model parameters
+    model_parameters = json.loads(conversation.model_parameters)
+    model_type = conversation.model_type
     documents = conversation.documents # path to documents
     memory = conversation.memory # serialized memory
     prompt_template = conversation.prompt_template # prompt template
@@ -120,7 +123,7 @@ def load_existing_conversation(conversation_id):
 
     model_info = [m for m in models if m['name'] == model][0]
 
-    init_llm(model_info, temperature)
+    init_llm(model_info, model_parameters)
 
     if documents:
         logger.info(f"Documents: {documents}")
@@ -132,7 +135,7 @@ def load_existing_conversation(conversation_id):
         init_standard_chain(prompt_template, memory)
 
 def save_or_update_conversation():
-    global conversation_id, model, temperature, documents, prompt_template, app, documents
+    global conversation_id, model, documents, prompt_template, app, documents, model_parameters, model_type
 
     memory = extract_memory_from_chain(documents)
     memory = json.dumps(memory) if memory else None
@@ -143,13 +146,22 @@ def save_or_update_conversation():
     if conversation:
         logger.info(f"Updating conversation with ID {conversation_id}")
         conversation.model = model
-        conversation.temperature = temperature
+        conversation.model_type = model_type
+        conversation.model_parameters = json.dumps(model_parameters)
         conversation.prompt_template = prompt_template
         conversation.documents = documents
         conversation.memory = memory
     else:
         logger.info(f"Saving new conversation with ID {conversation_id}")
-        conversation = Conversation(conversation_id=conversation_id, model=model, temperature=temperature, prompt_template=prompt_template, documents=documents, memory=memory)
+        conversation = Conversation(
+            conversation_id=conversation_id,
+            model=model, 
+            model_type=model_type,
+            model_parameters=json.dumps(model_parameters),
+            prompt_template=prompt_template,
+            documents=documents,
+            memory=memory
+        )
 
     with app.app_context():
         db.session.add(conversation)
@@ -161,6 +173,6 @@ def list_conversations():
 
     if conversations:
         for conversation in conversations:
-            logger.info(f"Conversation ID: {conversation.conversation_id}, Model: {conversation.model}, Temperature: {conversation.temperature}, Prompt template: {conversation.prompt_template}, Documents: {conversation.documents}")
+            logger.info(f"Conversation ID: {conversation.conversation_id}, Model: {conversation.model}, Prompt template: {conversation.prompt_template}, Documents: {conversation.documents}")
     else:
         logger.info("No conversations found")
