@@ -29,6 +29,9 @@ def create_excerpt_from_text(text, max_length=100):
 
     return text
 
+def is_url(url: str):
+    return url.startswith('http') or url.startswith('www')
+
 # TODO: refactor to return tuple of extensions in subdirectory
 def detect_file_type(directory_path):
     # Get the first file in the directory
