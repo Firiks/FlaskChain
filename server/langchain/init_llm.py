@@ -2,11 +2,8 @@
 Handle the initialization of the LLM and the chain.
 """
 
-# TODO: https://python.langchain.com/docs/expression_language/how_to/message_history
-
 # core imports
 import os
-import json
 
 # langchain imports
 from langchain.chat_models import ChatOpenAI
@@ -57,7 +54,7 @@ def extract_memory_from_chain(documents=None):
 #     if type == 'gguf':
 #         return llm.get_num_tokens(text)
 #     elif type == 'openai':
-#         # TODO: count openai tokens
+#         # count openai tokens
 #         pass
 
 def parse_model_parameters(model_parameters, type='gguf'):
@@ -105,7 +102,6 @@ def init_local_llm(model_info, temperature, top_p, top_k, max_tokens, n_ctx, n_g
     if not os.path.exists(model_path):
         raise Exception(f"Model path {model_path} does not exist")
 
-    #TODO: tweak the parameters
     llm = LlamaCpp(
         # n_threads=8,
         model_path=model_path,
