@@ -58,6 +58,8 @@ def extract_memory_from_chain(documents=None):
 #         pass
 
 def parse_model_parameters(model_parameters, type='gguf'):
+    model_parameters = vars(model_parameters)
+
     if type == 'gguf':
         parsed_params = {
             'temperature': float(model_parameters.get('temperature', 0.0)),

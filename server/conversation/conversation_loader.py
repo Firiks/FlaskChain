@@ -74,8 +74,8 @@ def start_conversation(args):
 
             # assemble prompt template
             prompt_template = assemble_template(prompt_template_id, rag, derive, is_llama)
-        except:
-            logger.error("Invalid model or prompt template")
+        except Exception as e:
+            logger.error(f"Error while starting conversation: {e}")
             exit(1)
 
         conversation_id = generate_random_string(8)
@@ -166,6 +166,24 @@ def save_or_update_conversation():
     with app.app_context():
         db.session.add(conversation)
         db.session.commit()
+
+def manual_conversation_update(c_id, m, mp, pt):
+    global app, conversation_id, model, model_parameters, prompt_template
+
+    with app.app_context():
+        conversation = Conversation.query.filter_by(conversation_id=c_id).first()
+
+    if conversation:
+        conversation.model = m
+        conversation.model_parameters = json.dumps(mp)
+        conversation.documents = documents
+        conversation.prompt_template = pt
+
+        with app.app_context():
+            db.session.commit()
+
+    else:
+        logger.error(f"Conversation with ID {conversation_id} does not exist")
 
 def list_conversations():
     with app.app_context():

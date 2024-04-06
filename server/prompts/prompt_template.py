@@ -36,7 +36,7 @@ def _get_template_by_id(template_id, system = False):
     except:
         raise Exception('Invalid template id')
 
-    if system and prompt_template.get('type') != 'system':
+    if system and not prompt_template.get('system', False):
         raise Exception('Invalid template type')
 
     prompt_template = prompt_template.get('value')
