@@ -1,7 +1,7 @@
 [
   {
     "name": "llama_instruction",
-    "value": "<s>[INST]TEMPLATE[INST]</s>",
+    "value": "<s>[INST]TEMPLATE[/INST]</s>",
     "template": true
   },
   {
